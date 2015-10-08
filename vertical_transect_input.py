@@ -10,7 +10,7 @@ import numpy as np
 from mpl_toolkits.basemap import Basemap
 import netCDF4
 import matplotlib.pyplot as plt
-from turtleModule import draw_basemap,dist
+from my_modules import draw_basemap,dist
 from matplotlib.mlab import griddata
 from datetime import datetime,timedelta
 def getHYcom(latpt,lonpt,time_roms,depth):
