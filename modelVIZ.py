@@ -5,7 +5,7 @@ main code
 @author: zdong
 """
 from functions import contour_fvcom_forecast,contour_roms_forecast,contour_fvcom_hindcast,contour_roms_hindcast
-
+import matplotlib.pyplot as plt
 option1=input('hindcast or forecast:')
 option2=input('fvcom or roms or both:') 
 if option1=='hindcast':
@@ -37,3 +37,4 @@ elif option1=='forecast':
         layer_fvcom=input('please input fvcom layer you want(0~9,9 is bottom)')
         contour_roms_forecast(method,layer_roms)
         contour_fvcom_forecast(method,layer_fvcom)
+plt.show()
