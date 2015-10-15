@@ -111,15 +111,12 @@ for i in range(len(LON)):
     for j in range(len(s_rho)):                              #this is roms`s layers
         temp_roms.append(temps_roms[TIME][j][index_one,index_two])
     Temp_roms.append(temp_roms)
-    print(i)
-
 
 ttt_roms=np.array(Temp_roms).transpose()
 
 hh_roms=[]
 for i in H_roms:
     hh_roms.append(-i*s_rho)
-    print('i',i)
 hh=np.array(hh_roms).transpose()
 distance=list(np.array([dist(LON_roms[0],LAT_roms[0],LON_roms[-1],LAT_roms[-1])])/len(LAT_roms)*range(1,len(LAT_roms)+1))   #this is distance between location
 distances=[]
@@ -130,14 +127,12 @@ temp_hycom=[]
 for i in range(len(LON_roms)):
     t=getHYcom(LAT_roms[i],LON_roms[i],TIME_roms,hh_roms[i])
     temp_hycom.append(t)
-    print(i)
 ttt_hycom=np.array(temp_hycom).transpose()
 
 temp_fvcom=[]
 for i in range(len(LON_roms)):
     t=getFVcom(LAT_roms[i],LON_roms[i],TIME_roms,hh_roms[i])
     temp_fvcom.append(t)
-    print('i',i)
 ttt_fvcom=np.array(temp_fvcom).transpose()
 
 TEMP_roms,TEMP_fvcom,TEMP_hycom,DEPTH,DIST=[],[],[],[],[]
