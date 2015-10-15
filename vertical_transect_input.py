@@ -182,9 +182,9 @@ for i in range(len(modtemp_i)):
     ax.plot(distance,H_roms)
     plt.ylim([int(max(dep_i))+2,int(min(dep_i))-2])
     plt.xlim([min(distance),max(distance)])
-    plt.xlabel('distance(km)',fontsize=20)
+    plt.xlabel('Distance(km)',fontsize=20)
     if i==0:
-        plt.ylabel('depth(m)',fontsize=20)
+        plt.ylabel('Depth(m)',fontsize=20)
     plt.text(20,180,str(datetime(2006,1,1,0,0,0)+timedelta(seconds=int(time[TIME]))))   #20,180 is location of text
     polygon=[]
     for j in range(len(H_roms)):
