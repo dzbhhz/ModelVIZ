@@ -195,4 +195,5 @@ for i in range(len(modtemp_i)):
     plt.title(''+MODEL[i]+' transect',fontsize=20)
 cbar=plt.colorbar(CS)
 cbar.ax.tick_params(labelsize=20)
+cbar.ax.set_ylabel('Temperature($^\circ$C)', fontsize=20)
 plt.show()
