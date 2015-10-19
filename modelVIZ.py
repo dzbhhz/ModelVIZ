@@ -6,7 +6,7 @@ main code
 """
 from functions import contour_fvcom_forecast,contour_roms_forecast,contour_fvcom_hindcast,contour_roms_hindcast
 import matplotlib.pyplot as plt
-option1=input('hindcast or forecast:')
+option1=input('hindcast or forecast:')   
 option2=input('fvcom or roms or both:') 
 if option1=='hindcast':
     if option2=='fvcom':
