@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct  9 11:14:17 2015
+some functions
+@author: zdong
+"""
 from datetime import datetime, timedelta
 import numpy as np
 from mpl_toolkits.basemap import Basemap
