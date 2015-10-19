@@ -1,4 +1,4 @@
-# MODULES
+# ModelVIZ
 modelVIZ.py is plotting horizontial FVCOM or ROMS temperature in ocean.
 
 plot_grid.py is plotting model grid.
