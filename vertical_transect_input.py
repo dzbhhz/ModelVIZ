@@ -84,38 +84,42 @@ temps_roms=data.variables['temp']
 h_roms=data.variables['h'][:]
 s_rho=data.variables['s_rho'][:]
 time=data.variables['ocean_time'][:]
-input_value=input('please input time(for example:2010,8,3,17,0,0):')
+input_value=input('please input time(for example:2010,8,3,17,0,0):')  #time you want
 input_time=datetime.strptime(input_value,"%Y,%m,%d,%H,%M,%S")
-t_diff=(input_time-datetime(2006,1,1)).total_seconds()     #2006,1,1 is model start time
+t_diff=(input_time-datetime(2006,1,1)).total_seconds()     #2006,1,1 is roms start time,roms time`s unit is second
 TIME=np.argmin(abs(t_diff-np.array(time)))
 TIME_roms=datetime(2006,1,1)+timedelta(seconds=int(time[TIME]))
 input_value_0_lon=float(input('please input start site lon(for example:-72.83):'))
-input_value_0_lat=float(input('please input start site lat(for example: 40.57):'))
+input_value_0_lat=float(input('please input start site lat(for example: 40.57):'))  #start point
 input_value_1_lon=float(input('please input end site lon(for example:-71.72):'))
-input_value_1_lat=float(input('please input end site lon(for example: 40.09):'))
-LON_interval,LAT_interval=(input_value_1_lon-input_value_0_lon)/10.0,(input_value_1_lat-input_value_0_lat)/10.0
+input_value_1_lat=float(input('please input end site lon(for example: 40.09):'))   #end point
+LON_interval,LAT_interval=(input_value_1_lon-input_value_0_lon)/10.0,(input_value_1_lat-input_value_0_lat)/10.0 
 LON,LAT=np.arange(input_value_0_lon,input_value_1_lon,LON_interval),np.arange(input_value_0_lat,input_value_1_lat,LAT_interval)
-
+                                     #just ten points between start point and end point
 LAT_roms=[]
 LON_roms=[]
 H_roms=[]
 Temp_roms=[]
-for i in range(len(LON)):    
+for i in range(len(LON)):    #get ten points` temperature of ROMS
     temp_roms=[]
     distance=dist(LON[i],LAT[i],lons_roms, lats_roms)
     node=np.argmin(distance)                 #get nearest node
-    index_one,index_two=int(node/len(lons_roms[0])),node%len(lons_roms[0])
+    index_one,index_two=int(node/len(lons_roms[0])),node%len(lons_roms[0]) # change list to list of list
     LAT_roms.append(lats_roms[index_one,index_two])
-    LON_roms.append(lons_roms[index_one,index_two])
+    LON_roms.append(lons_roms[index_one,index_two])    #get nearest point`s lat,lon
     H_roms.append(h_roms[index_one,index_two])       
     for j in range(len(s_rho)):                              #this is roms`s layers
         temp_roms.append(temps_roms[TIME][j][index_one,index_two])
     Temp_roms.append(temp_roms)
 
-ttt_roms=np.array(Temp_roms).transpose()
-
+ttt_roms=np.array(Temp_roms).transpose()  
+'''
+ change [[layer1,lyaer2,,,last layer],[layer1,lyaer2,,,last layer],,,,[layer1,lyaer2,,,last layer]]
+ to  [[layer1,layer1,,,layer1],[layer2,layer2,,,layer2],,,[last layer,last layer,,,last layer]]
+ use in griddata later
+'''
 hh_roms=[]
-for i in H_roms:
+for i in H_roms:  #get depth
     hh_roms.append(-i*s_rho)
 hh=np.array(hh_roms).transpose()
 distance=list(np.array([dist(LON_roms[0],LAT_roms[0],LON_roms[-1],LAT_roms[-1])])/len(LAT_roms)*range(1,len(LAT_roms)+1))   #this is distance between location
@@ -124,19 +128,19 @@ for i in range(len(s_rho)):
     distances.append(distance)
 
 temp_hycom=[]
-for i in range(len(LON_roms)):
+for i in range(len(LON_roms)): #get hycom temperature
     t=getHYcom(LAT_roms[i],LON_roms[i],TIME_roms,hh_roms[i])
     temp_hycom.append(t)
 ttt_hycom=np.array(temp_hycom).transpose()
 
 temp_fvcom=[]
-for i in range(len(LON_roms)):
+for i in range(len(LON_roms)): #get fvcom temperature
     t=getFVcom(LAT_roms[i],LON_roms[i],TIME_roms,hh_roms[i])
     temp_fvcom.append(t)
 ttt_fvcom=np.array(temp_fvcom).transpose()
 
 TEMP_roms,TEMP_fvcom,TEMP_hycom,DEPTH,DIST=[],[],[],[],[]
-for i in range(len(ttt_roms)):
+for i in range(len(ttt_roms)): #change list of list to list
     for j in range(len(ttt_roms[0])):
         TEMP_roms.append(ttt_roms[i][j])
         TEMP_fvcom.append(ttt_fvcom[i][j])
@@ -168,7 +172,7 @@ MODEL=['ROMS','FVCOM','HYCOM']
 fig = plt.figure()
 ax = fig.add_subplot(111)
 draw_basemap(fig, ax, lonsize, latsize)
-plt.scatter(LON_roms,LAT_roms)
+#plt.scatter(LON_roms,LAT_roms) 
 fig = plt.figure()
 for i in range(len(modtemp_i)):
     ax = fig.add_subplot(1,3,i+1)
@@ -184,8 +188,8 @@ for i in range(len(modtemp_i)):
     polygon=[]
     for j in range(len(H_roms)):
         polygon.append([distance[j],H_roms[j]])
-    polygon.append([min(distance),200])
-    pg=plt.Polygon(polygon,color='white')  
+    polygon.append([min(distance),200])   
+    pg=plt.Polygon(polygon,color='white')  #let deeper than bottom is white
     ax.add_patch(pg)                                 
     plt.title(''+MODEL[i]+' transect',fontsize=20)
 cbar=plt.colorbar(CS)
